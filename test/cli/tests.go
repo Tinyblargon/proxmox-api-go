@@ -82,6 +82,25 @@ type TestOutput struct {
 	t      *testing.T
 }
 
+// Contains asserts that the specified string, list(array, slice...) or map contains the specified substring or element.
+func (o TestOutput) Contains(contains ...string) {
+	for _, e := range contains {
+		require.Contains(o.t, o.output, e)
+	}
+}
+
+// Error asserts that the command returned an error.
+func (o TestOutput) Error() {
+	require.Error(o.t, o.err)
+}
+
+// ErrorContains asserts that the command returned an error and the error contains the specified string.
+func (o TestOutput) ErrorContains(contains ...string) {
+	for _, e := range contains {
+		require.ErrorContains(o.t, o.err, e)
+	}
+}
+
 // Returns a copy of the command error as to not accidentally mutate it.
 func (o TestOutput) GetErr() error {
 	return o.err
@@ -90,4 +109,38 @@ func (o TestOutput) GetErr() error {
 // Returns a copy of the command output as to not accidentally mutate it.
 func (o TestOutput) GetOutput() string {
 	return o.output
+}
+
+// JsonEqual asserts that the command output is qual to the specified json object.
+func (o TestOutput) JsonEqual(v any) {
+	switch Json := v.(type) {
+	case string:
+		require.NotEmpty(o.t, Json)
+		require.JSONEq(o.t, Json, o.output)
+	default:
+		rawJson, err := json.Marshal(Json)
+		require.NoError(o.t, err)
+		require.JSONEq(o.t, string(rawJson), o.output)
+	}
+}
+
+func (o TestOutput) JsonUnmarshal(v any) {
+	require.NoError(o.t, json.Unmarshal([]byte(o.output), v))
+}
+
+// NoError asserts that the command returned no error.
+func (o TestOutput) NoError() {
+	require.NoError(o.t, o.err)
+}
+
+// NotContains asserts that the command output does NOT contain the specified substring or element.
+func (o TestOutput) NotContains(contains ...string) {
+	for _, e := range contains {
+		require.NotContains(o.t, o.output, e)
+	}
+}
+
+// NotEmpty asserts that the command output is NOT empty. I.e. not "".
+func (o TestOutput) NotEmpty() {
+	require.NotEmpty(o.t, o.output)
 }
