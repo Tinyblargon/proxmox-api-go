@@ -5,3 +5,6 @@ package test
 const ApiUrl string = "https://example.com:8006/api2/json"
 const RootUser string = "root@pam"
 const RootPassword string = "root"
+
+// name of a node in the cluster
+const FirstNode string = "pve"
