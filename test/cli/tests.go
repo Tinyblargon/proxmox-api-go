@@ -2,6 +2,7 @@ package test
 
 import (
 	"bytes"
+	"encoding/csv"
 	"encoding/json"
 	"io"
 	"os"
@@ -20,15 +21,23 @@ func Login(UserID string, Password string, OTP string, HttpHeaders string) error
 
 // Run the cli command.
 // commandInput is optional and only the first instance wil be evaluated.
-func Run(t *testing.T, command []string, variables []EnvironmentVariable, commandInput ...any) TestOutput {
+func Run(t *testing.T, command string, variables []EnvironmentVariable, commandInput ...any) TestOutput {
 	for _, e := range variables {
 		os.Setenv(e.Name, e.Value)
 	}
-	cli.RootCmd.SetArgs(command)
+
+	// split command into array preserving text between quotes
+	r := csv.NewReader(strings.NewReader(command))
+	r.Comma = ' ' // space
+	fields, err := r.Read()
+	require.NoError(t, err)
+
+	// run command
+	cli.RootCmd.SetArgs(fields)
 	buffer := new(bytes.Buffer)
 	cli.RootCmd.SetOut(buffer)
 	setCommandInput(t, commandInput)
-	err := cli.RootCmd.Execute()
+	err = cli.RootCmd.Execute()
 	out, _ := io.ReadAll(buffer)
 	return TestOutput{err: err, output: string(out), t: t}
 }
