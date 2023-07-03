@@ -8,51 +8,39 @@ import (
 )
 
 func Test_AcmeAccount_1_Cleanup(t *testing.T) {
-	Test := cliTest.Test{
-		ReqErr:      true,
-		ErrContains: "test-1",
-		Args:        []string{"-i", "delete", "acmeaccount", "test-1"},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i delete acmeaccount test-1", cliTest.Variables())
+	test.ErrorContains("test-1")
 }
 
 func Test_AcmeAccount_1_Set(t *testing.T) {
-	Test := cliTest.Test{
-		InputJson: `
-{
-	"contact": [
-		"a@nonexistantdomain.com"
-	],
-	"directory": "https://acme-staging-v02.api.letsencrypt.org/directory",
-	"tos": true
-}`,
-		Contains: []string{"(test-1)"},
-		Args:     []string{"-i", "create", "acmeaccount", "test-1"},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i create acmeaccount test-1", cliTest.Variables(), `
+	{
+		"contact": [
+			"a@nonexistantdomain.com"
+		],
+		"directory": "https://acme-staging-v02.api.letsencrypt.org/directory",
+		"tos": true
+	}`)
+	test.NoError()
+	test.Contains("(test-1)")
 }
 
 func Test_AcmeAccount_1_Get(t *testing.T) {
-	Test := cliTest.Test{
-		OutputJson: `
-{
-	"name": "test-1",
-	"contact": [
-		"a@nonexistantdomain.com"
-	],
-	"directory": "https://acme-staging-v02.api.letsencrypt.org/directory",
-	"tos": true
-}`,
-		Args: []string{"-i", "get", "acmeaccount", "test-1"},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i get acmeaccount test-1", cliTest.Variables())
+	test.NoError()
+	test.JsonEqual(`
+	{
+		"name": "test-1",
+		"contact": [
+			"a@nonexistantdomain.com"
+		],
+		"directory": "https://acme-staging-v02.api.letsencrypt.org/directory",
+		"tos": true
+	}`)
 }
 
 func Test_AcmeAccount_1_Delete(t *testing.T) {
-	Test := cliTest.Test{
-		Expected: "",
-		ReqErr:   false,
-		Args:     []string{"-i", "delete", "acmeaccount", "test-1"},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i delete acmeaccount test-1", cliTest.Variables())
+	test.NoError()
+	test.Contains("test-1")
 }
