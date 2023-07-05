@@ -2,6 +2,7 @@ package content_template_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
@@ -15,39 +16,29 @@ import (
 const storage string = "local"
 
 func checkIfTemplateDoesNotExist(t *testing.T, template, node, storage string) {
-	Test := cliTest.Test{
-		NotContains: []string{template},
-		Args:        []string{"-i", "list", "files", cliTest.FirstNode, storage, string(proxmox.ContentType_Template)},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i list files "+strings.Join([]string{cliTest.FirstNode, storage, string(proxmox.ContentType_Template)}, " "), cliTest.Variables())
+	test.NoError()
+	test.NotContains(template)
 }
 
 func Test_ContentTemplate_Download_Cleanup(t *testing.T) {
-	Test := cliTest.Test{
-		Args: []string{"-i", "delete", "file", cliTest.FirstNode, storage, string(proxmox.ContentType_Template), cliTest.DownloadedLXCTemplate},
-	}
-	Test.StandardTest(t)
-}
-
-func Test_ContentTemplate_Existence_Removed_0(t *testing.T) {
+	test := cliTest.Run(t, "-i delete file "+strings.Join([]string{cliTest.FirstNode, storage, string(proxmox.ContentType_Template), cliTest.DownloadedLXCTemplate}, " "), cliTest.Variables())
+	test.NoError()
 	checkIfTemplateDoesNotExist(t, cliTest.DownloadedLXCTemplate, cliTest.FirstNode, storage)
 }
 
 func Test_ContentTemplate_Download(t *testing.T) {
-	Test := cliTest.Test{
-		Contains: []string{"(" + cliTest.DownloadedLXCTemplate + ")"},
-		Args:     []string{"-i", "content", "template", "download", cliTest.FirstNode, storage, cliTest.DownloadedLXCTemplate},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i content template download "+strings.Join([]string{cliTest.FirstNode, storage, cliTest.DownloadedLXCTemplate}, " "), cliTest.Variables())
+	test.NoError()
+	test.Contains("(" + cliTest.DownloadedLXCTemplate + ")")
 }
 
 func Test_ContentTemplate_List(t *testing.T) {
-	Test := cliTest.Test{
-		Return: true,
-		Args:   []string{"-i", "list", "files", cliTest.FirstNode, storage, string(proxmox.ContentType_Template)},
-	}
+	test := cliTest.Run(t, "-i list files "+strings.Join([]string{cliTest.FirstNode, storage, string(proxmox.ContentType_Template)}, " "), cliTest.Variables())
+	test.NoError()
+	test.NotEmpty()
 	var data []*proxmox.Content_FileProperties
-	require.NoError(t, json.Unmarshal(Test.StandardTest(t), &data))
+	require.NoError(t, json.Unmarshal([]byte(test.GetOutput()), &data))
 	assert.Equal(t, cliTest.DownloadedLXCTemplate, data[0].Name)
 	assert.NotEqual(t, "", data[0].Format)
 	assert.Greater(t, data[0].Size, uint(0))
@@ -55,11 +46,9 @@ func Test_ContentTemplate_List(t *testing.T) {
 }
 
 func Test_ContentTemplate_Download_Delete(t *testing.T) {
-	Test := cliTest.Test{
-		Contains: []string{cliTest.DownloadedLXCTemplate},
-		Args:     []string{"-i", "delete", "file", cliTest.FirstNode, storage, string(proxmox.ContentType_Template), cliTest.DownloadedLXCTemplate},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i delete file "+cliTest.FirstNode+" "+storage+" "+string(proxmox.ContentType_Template)+" "+cliTest.DownloadedLXCTemplate, cliTest.Variables())
+	test.NoError()
+	test.Contains(cliTest.DownloadedLXCTemplate)
 }
 
 func Test_ContentTemplate_Existence_Removed_1(t *testing.T) {
