@@ -1,5 +1,9 @@
 package proxmox
 
+import (
+	"errors"
+)
+
 type CpuFlags struct {
 	AES        *bool `json:"aes,omitempty"`        // Activate AES instruction set for HW acceleration.
 	AmdNoSSB   *bool `json:"amdnossb,omitempty"`   // Notifies guest OS that host is not vulnerable for Spectre on AMD CPUs.
@@ -17,6 +21,17 @@ type CpuFlags struct {
 
 // min value 0 is unlimited, max value of 128
 type CpuLimit uint8
+
+const (
+	CpuLimit_Error_UpperBound string = "maximum value of CpuLimit is 128"
+)
+
+func (limit CpuLimit) Validate() error {
+	if limit > 128 {
+		return errors.New(CpuLimit_Error_UpperBound)
+	}
+	return nil
+}
 
 // min value 1, max value 4
 type CpuSockets uint8
