@@ -36,6 +36,21 @@ func (limit CpuLimit) Validate() error {
 // min value 1, max value 4
 type CpuSockets uint8
 
+const (
+	CpuSockets_Error_LowerBound string = "minimum value of CpuSockets is 1"
+	CpuSockets_Error_UpperBound string = "maximum value of CpuSockets is 4"
+)
+
+func (sockets CpuSockets) Validate() error {
+	if sockets < 1 {
+		return errors.New(CpuSockets_Error_LowerBound)
+	}
+	if sockets > 4 {
+		return errors.New(CpuSockets_Error_UpperBound)
+	}
+	return nil
+}
+
 // enum
 type CpuType string
 
