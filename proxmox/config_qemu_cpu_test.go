@@ -62,3 +62,29 @@ func Test_CpuSockets_Validate(t *testing.T) {
 		})
 	}
 }
+
+func Test_CpuUnits_Validate(t *testing.T) {
+	testData := []struct {
+		name  string
+		input CpuUnits
+		err   error
+	}{
+		// Invalid
+		{name: "Invalid errors.New(CpuUnits_Error_UpperBound)",
+			input: 262145,
+			err:   errors.New(CpuUnits_Error_UpperBound),
+		},
+		// Valid
+		{name: "Valid LowerBound",
+			input: 0,
+		},
+		{name: "Valid UpperBound",
+			input: 262144,
+		},
+	}
+	for _, test := range testData {
+		t.Run(test.name, func(*testing.T) {
+			require.Equal(t, test.input.Validate(), test.err, test.name)
+		})
+	}
+}

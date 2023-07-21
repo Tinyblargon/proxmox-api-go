@@ -57,6 +57,17 @@ type CpuType string
 // min value 0 is unset, max value of 262144
 type CpuUnits uint32
 
+const (
+	CpuUnits_Error_UpperBound string = "maximum value of CpuUnits is 262144"
+)
+
+func (units CpuUnits) Validate() error {
+	if units > 262144 {
+		return errors.New(CpuUnits_Error_UpperBound)
+	}
+	return nil
+}
+
 // min value 0 is unset, max value 512. is QemuCpuCores * CpuSockets
 type CpuVirtualCores uint16
 
