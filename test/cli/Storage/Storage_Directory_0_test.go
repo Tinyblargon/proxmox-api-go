@@ -13,7 +13,7 @@ func Test_Storage_Directory_0_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_Directory_0_Create_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.DirectoryFull)
+	s := storagesubtests.DirectoryFull()
 	storagesubtests.Create(s, "directory-test-0", t)
 }
 
@@ -22,7 +22,7 @@ func Test_Storage_Directory_0_Get_Full(t *testing.T) {
 }
 
 func Test_Storage_Directory_0_Update_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.DirectoryEmpty)
+	s := storagesubtests.DirectoryEmpty()
 	s.BackupRetention = &proxmox.ConfigStorageBackupRetention{}
 	storagesubtests.Update(s, "directory-test-0", t)
 }

@@ -9,29 +9,20 @@ import (
 )
 
 func Cleanup(name string, t *testing.T) {
-	Test := cliTest.Test{
-		ReqErr:      true,
-		ErrContains: name,
-		Args:        []string{"-i", "delete", "storage", name},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i delete storage "+name, cliTest.Variables())
+	test.ErrorContains(name)
 }
 
 func Delete(name string, t *testing.T) {
-	Test := cliTest.Test{
-		Contains: []string{name},
-		Args:     []string{"-i", "delete", "storage", name},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i delete storage "+name, cliTest.Variables())
+	test.NoError()
+	test.Contains(name)
 }
 
 func Get(s *proxmox.ConfigStorage, name string, t *testing.T) {
-	cliTest.SetEnvironmentVariables()
-	Test := cliTest.Test{
-		OutputJson: InlineMarshal(s),
-		Args:       []string{"-i", "get", "storage", name},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i get storage "+name, cliTest.Variables())
+	test.NoError()
+	test.JsonEqual(s)
 }
 
 func Create(s *proxmox.ConfigStorage, name string, t *testing.T) {
@@ -43,10 +34,7 @@ func Update(s *proxmox.ConfigStorage, name string, t *testing.T) {
 }
 
 func createOrUpdate(s *proxmox.ConfigStorage, name, command string, t *testing.T) {
-	Test := cliTest.Test{
-		InputJson: InlineMarshal(s),
-		Contains:  []string{"(" + name + ")"},
-		Args:      []string{"-i", command, "storage", name},
-	}
-	Test.StandardTest(t)
+	test := cliTest.Run(t, "-i "+command+" storage "+name, cliTest.Variables(), s)
+	test.NoError()
+	test.Contains("(" + name + ")")
 }

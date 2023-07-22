@@ -13,7 +13,7 @@ func Test_Storage_ISCSI_0_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_ISCSI_0_Create_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.IscsiFull)
+	s := storagesubtests.IscsiFull()
 	storagesubtests.Create(s, "iscsi-test-0", t)
 }
 
@@ -22,7 +22,7 @@ func Test_Storage_ISCSI_0_Get_Full(t *testing.T) {
 }
 
 func Test_Storage_ISCSI_0_Update_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.IscsiEmpty)
+	s := storagesubtests.IscsiEmpty()
 	s.BackupRetention = &proxmox.ConfigStorageBackupRetention{}
 	storagesubtests.Update(s, "iscsi-test-0", t)
 }

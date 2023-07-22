@@ -13,23 +13,23 @@ func Test_Storage_ZFSoverISCSI_Lio_0_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_ZFSoverISCSI_Lio_0_Create_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.ZFSoverISCSI_LioFull)
+	s := storagesubtests.ZFSoverISCSI_LioFull()
 	storagesubtests.Create(s, "zfs-over-iscsi_lio-test-0", t)
 }
 
 func Test_Storage_ZFSoverISCSI_Lio_0_Get_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.ZFSoverISCSI_LioFull)
+	s := storagesubtests.ZFSoverISCSI_LioFull()
 	s.ID = "zfs-over-iscsi_lio-test-0"
 	storagesubtests.Get(s, s.ID, t)
 }
 
 func Test_Storage_ZFSoverISCSI_Lio_0_Update_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.ZFSoverISCSI_LioEmpty)
+	s := storagesubtests.ZFSoverISCSI_LioEmpty()
 	storagesubtests.Update(s, "zfs-over-iscsi_lio-test-0", t)
 }
 
 func Test_Storage_ZFSoverISCSI_Lio_0_Get_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.ZFSoverISCSI_LioEmpty)
+	s := storagesubtests.ZFSoverISCSI_LioEmpty()
 	s.ID = "zfs-over-iscsi_lio-test-0"
 	s.ZFSoverISCSI.Blocksize = proxmox.PointerString("8k")
 	s.Content = &proxmox.ConfigStorageContent{

@@ -13,7 +13,7 @@ func Test_Storage_LVM_0_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_LVM_0_Create_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.LVMFull)
+	s := storagesubtests.LVMFull()
 	storagesubtests.Create(s, "lvm-test-0", t)
 }
 
@@ -22,7 +22,7 @@ func Test_Storage_LVM_0_Get_Full(t *testing.T) {
 }
 
 func Test_Storage_LVM_0_Update_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.LVMEmpty)
+	s := storagesubtests.LVMEmpty()
 	s.BackupRetention = &proxmox.ConfigStorageBackupRetention{}
 	storagesubtests.Update(s, "lvm-test-0", t)
 }

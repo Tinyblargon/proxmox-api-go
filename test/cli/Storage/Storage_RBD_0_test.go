@@ -13,7 +13,7 @@ func Test_Storage_RBD_0_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_RBD_0_Create_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.RBDFull)
+	s := storagesubtests.RBDFull()
 	s.RBD.Keyring = proxmox.PointerString("keyringplaceholder")
 	storagesubtests.Create(s, "rbd-test-0", t)
 }
@@ -23,7 +23,7 @@ func Test_Storage_RBD_0_Get_Full(t *testing.T) {
 }
 
 func Test_Storage_RBD_0_Update_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.RBDEmpty)
+	s := storagesubtests.RBDEmpty()
 	storagesubtests.Update(s, "rbd-test-0", t)
 }
 

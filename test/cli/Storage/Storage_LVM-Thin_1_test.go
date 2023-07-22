@@ -12,7 +12,7 @@ func Test_Storage_LVMThin_1_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_LVMThin_1_Create_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.LVMThinEmpty)
+	s := storagesubtests.LVMThinEmpty()
 	storagesubtests.Create(s, "lvm-thin-test-1", t)
 }
 
@@ -21,7 +21,7 @@ func Test_Storage_LVMThin_1_Get_Empty(t *testing.T) {
 }
 
 func Test_Storage_LVMThin_1_Update_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.LVMThinFull)
+	s := storagesubtests.LVMThinFull()
 	storagesubtests.Update(s, "lvm-thin-test-1", t)
 }
 

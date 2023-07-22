@@ -13,7 +13,7 @@ func Test_Storage_CephFS_1_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_CephFS_1_Create_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.CephfsEmpty)
+	s := storagesubtests.CephfsEmpty()
 	s.BackupRetention = &proxmox.ConfigStorageBackupRetention{}
 	storagesubtests.Create(s, "cephfs-test-1", t)
 }
@@ -23,7 +23,7 @@ func Test_Storage_CephFS_1_Get_Empty(t *testing.T) {
 }
 
 func Test_Storage_CephFS_1_Update_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.CephfsFull)
+	s := storagesubtests.CephfsFull()
 	storagesubtests.Update(s, "cephfs-test-1", t)
 }
 

@@ -13,7 +13,7 @@ func Test_Storage_GlusterFS_1_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_GlusterFS_1_Create_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.GlusterfsEmpty)
+	s := storagesubtests.GlusterfsEmpty()
 	s.BackupRetention = &proxmox.ConfigStorageBackupRetention{}
 	storagesubtests.Create(s, "glusterfs-test-1", t)
 }
@@ -23,7 +23,7 @@ func Test_Storage_GlusterFS_1_Get_Empty(t *testing.T) {
 }
 
 func Test_Storage_GlusterFS_1_Update_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.GlusterfsFull)
+	s := storagesubtests.GlusterfsFull()
 	storagesubtests.Update(s, "glusterfs-test-1", t)
 }
 

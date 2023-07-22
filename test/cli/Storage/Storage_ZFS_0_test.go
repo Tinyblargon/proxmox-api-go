@@ -12,7 +12,7 @@ func Test_Storage_ZFS_0_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_ZFS_0_Create_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.ZFSFull)
+	s := storagesubtests.ZFSFull()
 	storagesubtests.Create(s, "zfs-test-0", t)
 }
 
@@ -21,7 +21,7 @@ func Test_Storage_ZFS_0_Get_Full(t *testing.T) {
 }
 
 func Test_Storage_ZFS_0_Update_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.ZFSEmpty)
+	s := storagesubtests.ZFSEmpty()
 	storagesubtests.Update(s, "zfs-test-0", t)
 }
 

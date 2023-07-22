@@ -13,7 +13,7 @@ func Test_Storage_SMB_1_Cleanup(t *testing.T) {
 }
 
 func Test_Storage_SMB_1_Create_Empty(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.SMBEmpty)
+	s := storagesubtests.SMBEmpty()
 	s.BackupRetention = &proxmox.ConfigStorageBackupRetention{}
 	storagesubtests.Create(s, "smb-test-1", t)
 }
@@ -23,7 +23,7 @@ func Test_Storage_SMB_1_Get_Empty(t *testing.T) {
 }
 
 func Test_Storage_SMB_1_Update_Full(t *testing.T) {
-	s := storagesubtests.CloneJson(storagesubtests.SMBFull)
+	s := storagesubtests.SMBFull()
 	s.SMB.Password = proxmox.PointerString("Enter123!")
 	storagesubtests.Update(s, "smb-test-1", t)
 }
